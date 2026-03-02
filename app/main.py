@@ -54,7 +54,7 @@ async def chat(request: Request):
     async def generate():
         """Stream tokens from OpenAI as Server-Sent Events."""
         stream = await client.chat.completions.create(
-            model="gpt-5-nano", # gpt-4o-mini, gpt-4.1, gpt-5-nano, gpt-5-mini
+            model="gpt-5-mini", # gpt-4o-mini, gpt-4.1, gpt-5-nano, gpt-5-mini
             messages=[system_message] + messages,
             stream=True,
         )
