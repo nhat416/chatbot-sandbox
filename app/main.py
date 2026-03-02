@@ -8,16 +8,19 @@ This is the entire backend. It does three things:
 """
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from openai import OpenAI
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize the OpenAI client (reads OPENAI_API_KEY from env automatically)
-client = OpenAI()
+# Initialize the async OpenAI client (reads OPENAI_API_KEY from env automatically)
+# IMPORTANT: We use AsyncOpenAI so streaming doesn't block the event loop.
+# The synchronous OpenAI() client would freeze the server until the full
+# response is generated, defeating the purpose of streaming.
+client = AsyncOpenAI()
 
 # Create the FastAPI app
 app = FastAPI(title="Chatbot Sandbox")
@@ -50,12 +53,12 @@ async def chat(request: Request):
 
     async def generate():
         """Stream tokens from OpenAI as Server-Sent Events."""
-        stream = client.chat.completions.create(
-            model="gpt-4o-mini",
+        stream = await client.chat.completions.create(
+            model="gpt-5-nano", # gpt-4o-mini, gpt-4.1, gpt-5-nano, gpt-5-mini
             messages=[system_message] + messages,
             stream=True,
         )
-        for chunk in stream:
+        async for chunk in stream:
             delta = chunk.choices[0].delta
             if delta.content:
                 # SSE format: each message is "data: <text>\n\n"
@@ -63,7 +66,15 @@ async def chat(request: Request):
         # Signal the end of the stream
         yield "data: [DONE]\n\n"
 
-    return StreamingResponse(generate(), media_type="text/event-stream")
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            # Prevent any buffering that would batch chunks together
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",  # Disables buffering in nginx proxies
+        },
+    )
 
 
 # --------------------------------------------------------------------------- #

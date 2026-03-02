@@ -57,6 +57,16 @@
             border-bottom-left-radius: 4px;
         }
 
+        /* ---- Typing cursor animation ---- */
+        .message.assistant.streaming::after {
+            content: "\25AE";
+            animation: blink 0.6s step-end infinite;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
         /* ---- Input Area ---- */
         #input-area {
             display: flex;
@@ -127,6 +137,16 @@
             return div;
         }
 
+        // ---- Rendering speed control ---- //
+        // Tokens arrive from OpenAI very fast. We queue them and render
+        // on a fixed interval so the text appears at a readable pace.
+        // Increase RENDER_INTERVAL_MS to slow down, decrease to speed up.
+        const RENDER_INTERVAL_MS = 50; // ~50% slower than real-time streaming
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
         // ---- Send message & stream response ---- //
         async function sendMessage() {
             const text = inputEl.value.trim();
@@ -138,8 +158,14 @@
             inputEl.value = "";
             sendBtn.disabled = true;
 
-            // Create empty assistant bubble that we'll fill as tokens arrive
+            // Create empty assistant bubble with a blinking cursor while streaming
             const bubble = addMessageBubble("assistant", "");
+            bubble.classList.add("streaming");
+
+            // Token queue: the network reader pushes tokens here,
+            // and a separate render loop pops them out on a timer.
+            const tokenQueue = [];
+            let streamDone = false;
 
             try {
                 const response = await fetch("/chat", {
@@ -148,29 +174,48 @@
                     body: JSON.stringify({ messages }),
                 });
 
-                // Read the SSE stream
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let assistantText = "";
+                // Start the network reader — it fills the token queue as fast
+                // as OpenAI sends chunks, without rendering anything yet.
+                const readerPromise = (async () => {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = "";
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
 
-                    // Decode the chunk and parse SSE lines
-                    const chunk = decoder.decode(value, { stream: true });
-                    const lines = chunk.split("\n");
+                        buffer += decoder.decode(value, { stream: true });
 
-                    for (const line of lines) {
-                        if (line.startsWith("data: ")) {
-                            const data = line.slice(6); // Remove "data: " prefix
-                            if (data === "[DONE]") break;
-                            assistantText += data;
-                            bubble.textContent = assistantText;
-                            chatEl.scrollTop = chatEl.scrollHeight;
+                        const parts = buffer.split("\n\n");
+                        buffer = parts.pop();
+
+                        for (const part of parts) {
+                            for (const line of part.split("\n")) {
+                                if (!line.startsWith("data: ")) continue;
+                                const data = line.slice(6);
+                                if (data === "[DONE]") continue;
+                                tokenQueue.push(data);
+                            }
                         }
                     }
+                    streamDone = true;
+                })();
+
+                // Render loop — drains the queue one token at a time on a timer.
+                // This is what controls the visible typing speed.
+                let assistantText = "";
+                while (!streamDone || tokenQueue.length > 0) {
+                    if (tokenQueue.length > 0) {
+                        assistantText += tokenQueue.shift();
+                        bubble.textContent = assistantText;
+                        chatEl.scrollTop = chatEl.scrollHeight;
+                    }
+                    await sleep(RENDER_INTERVAL_MS);
                 }
+
+                // Wait for the network reader to fully finish
+                await readerPromise;
 
                 // Save full assistant reply to conversation history
                 messages.push({ role: "assistant", content: assistantText });
@@ -180,6 +225,8 @@
                 console.error(err);
             }
 
+            // Remove the blinking cursor once streaming is complete
+            bubble.classList.remove("streaming");
             sendBtn.disabled = false;
             inputEl.focus();
         }
