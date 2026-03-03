@@ -6,7 +6,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 
-ENV PATH="/root/.opencode/bin:${PATH}"
+ENV PATH="/root/.opencode/bin:/root/.local/bin:${PATH}"
 
 # Install uv (fast Python package manager)
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
@@ -19,6 +19,9 @@ COPY pyproject.toml ./
 
 # Install dependencies
 RUN uv sync
+
+# Install linting tool available in shell by default
+RUN uv tool install ruff
 
 # Copy the rest of the project
 COPY . .

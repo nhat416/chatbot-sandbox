@@ -194,11 +194,18 @@ This project includes a Dev Container configuration for **GitHub Codespaces** an
 
 The Dev Container uses `python:3.12-slim` as its base image, installs key CLI tools, and pre-configures the Python and Pylance VS Code extensions.
 
+**Recent Dev Container updates:**
+
+- **What changed:** Added `ruff` to the container image via `uv tool install ruff`, and added `/root/.local/bin` to `PATH` so `uv tool` binaries are available by default.
+- **Why it changed:** Ensures linting is available out of the box for contributors and AI agents without extra setup steps.
+- **How to use/verify:** Rebuild the container, then run `ruff --version` (or `uv run ruff check .`) inside the container.
+
 **Key tools available inside the Dev Container:**
 
 - `opencode` - AI coding agent CLI installed in `/root/.opencode/bin`
 - `python` - Python 3.12 runtime
 - `uv` - fast Python package/project manager (`uv sync`, `uv run ...`)
+- `ruff` - Python linter/formatter CLI available globally in the container
 - `fastapi` - app dev server CLI (available via environment)
 - `git` - source control tooling (via Dev Container feature)
 
@@ -208,6 +215,7 @@ Quick sanity check after container startup:
 opencode --version
 python --version
 uv --version
+ruff --version
 git --version
 ```
 

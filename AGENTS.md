@@ -157,6 +157,14 @@ Include AGENTS.md updates in the same PR as the change introducing the new rule.
 - For every feature, bug fix, patch, or workflow/tooling update, review whether `README.md` is now outdated.
 - If outdated, update `README.md` in the same change set/PR to keep setup, architecture, and behavior docs accurate.
 
+### Dev Container README Requirement
+
+- For any change under `.devcontainer/` (for example: Dockerfile, devcontainer.json, features, installed tools, startup commands, forwarded ports), update the Dev Container section in `README.md` in the same change set.
+- Document:
+  1. What changed
+  2. Why it changed
+  3. How users run/verify the updated tools inside the dev container
+
 ## 12) Default Decision Policy for Agents
 
 When requirements are ambiguous, choose the most conservative option that:
