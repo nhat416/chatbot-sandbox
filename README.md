@@ -32,6 +32,7 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 - ChatGPT-style interface with left sidebar, thread history, and centered composer
 - Multi-thread chat state in the browser with active-thread switching
 - Frontend thread persistence via `localStorage` (no backend database)
+- One-click `Clear chats` action to reset local thread history
 - Async FastAPI backend for non-blocking I/O
 - Dev Container support for GitHub Codespaces and VS Code
 - Single-command startup with `uv`
@@ -256,6 +257,7 @@ The frontend is a self-contained HTML file with inline CSS and JavaScript -- no 
 - **Thread-based chat UI** includes a left sidebar with chat threads, new chat action, and active-thread highlighting.
 - **Conversation context** is maintained per thread. The active thread's full history is sent with each request so the model has context.
 - **Persistence** uses browser `localStorage` to retain threads/messages across page refreshes on the same browser.
+- **History reset** includes a `Clear chats` sidebar action that removes local thread history for the current browser origin.
 - **Streaming display** uses a token queue architecture: the network reader fills a queue as tokens arrive, and a separate render loop drains the queue at 50ms intervals. This creates a smooth, readable typing animation regardless of network speed.
 - **Keyboard shortcuts**: Enter sends the message, Shift+Enter inserts a newline, and input auto-resizes as you type.
 - **Responsive layout**: Sidebar becomes off-canvas on smaller screens with a mobile toggle.
@@ -363,6 +365,7 @@ This repository includes an agent operating guide in `AGENTS.md` and uses spec-d
 | Server starts but chat returns errors | Check that your OpenAI API key has available credits and that the selected model is accessible on your account. |
 | Port 8000 already in use | Stop the other process or run with a different port: `uv run fastapi dev app/main.py --port 8001` |
 | Tokens appear choppy or delayed | This may occur behind certain reverse proxies that buffer SSE streams. The `X-Accel-Buffering: no` header handles Nginx; other proxies may need similar configuration. |
+| Need to reset old chat threads | Use the sidebar `Clear chats` action. If needed, manually delete `chatbot_sandbox_threads_v1` in browser DevTools under Application/Storage -> Local Storage for your app origin, then refresh. |
 
 ## License
 

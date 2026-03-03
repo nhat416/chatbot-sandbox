@@ -10,6 +10,7 @@ The current UI is functional but does not match the desired product direction sh
 - Make `static/index.html` visually and structurally similar to the design images.
 - Add a left sidebar with nav actions and visible chat history threads.
 - Support multiple chat threads in the frontend state with active-thread switching.
+- Provide an in-UI way to clear local thread history.
 - Preserve streaming chat behavior via `POST /chat` SSE responses.
 - Ensure layout remains usable on desktop and mobile.
 
@@ -26,7 +27,7 @@ The current UI is functional but does not match the desired product direction sh
 ## Proposed Behavior
 - Add a sidebar with:
   - brand/header row
-  - actions (`New chat`, `Search chats`, etc. as UI items)
+  - actions (`New chat`, `Clear chats`, `Search chats`, etc. as UI items)
   - "Your chats" list showing thread titles
   - profile footer area
 - Main area includes:
@@ -36,6 +37,7 @@ The current UI is functional but does not match the desired product direction sh
   - rounded composer dock near the bottom
 - Frontend manages multiple threads in memory and local storage.
 - Switching threads immediately updates message view.
+- Clearing chats removes stored local thread state and resets the visible thread list.
 
 ## API / Data Contract Changes
 - No API changes.
@@ -46,10 +48,12 @@ The current UI is functional but does not match the desired product direction sh
 - Empty/whitespace-only input should do nothing.
 - Failed network call should show a clear assistant-side error message.
 - Thread title defaults should remain readable for very short or very long prompts.
+- Clearing history should not affect backend state (none exists) or API behavior.
 
 ## Acceptance Criteria
 - [ ] Sidebar with thread history is visible on desktop and similar to design.
 - [ ] Users can create a new thread and switch between threads.
+- [ ] Users can clear local thread history from the sidebar.
 - [ ] Sending messages streams assistant output as before and stores messages in the active thread.
 - [ ] Empty-state prompt appears when thread has no messages.
 - [ ] Mobile layout remains usable (sidebar toggle/stacked behavior).

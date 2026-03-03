@@ -2,7 +2,7 @@ FROM python:3.12-slim
 
 # Install system dependencies and OpenCode CLI
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl ca-certificates tar \
+    && apt-get install -y --no-install-recommends curl ca-certificates tar nano \
     && rm -rf /var/lib/apt/lists/* \
     && curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 
