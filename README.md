@@ -186,7 +186,24 @@ This project includes a Dev Container configuration for **GitHub Codespaces** an
 2. Open the project folder and click **Reopen in Container** when prompted.
 3. Dependencies install automatically via the post-create command.
 
-The Dev Container uses `python:3.12-slim` as its base image, installs `uv`, and pre-configures the Python and Pylance VS Code extensions.
+The Dev Container uses `python:3.12-slim` as its base image, installs key CLI tools, and pre-configures the Python and Pylance VS Code extensions.
+
+**Key tools available inside the Dev Container:**
+
+- `opencode` - AI coding agent CLI installed in `/root/.opencode/bin`
+- `python` - Python 3.12 runtime
+- `uv` - fast Python package/project manager (`uv sync`, `uv run ...`)
+- `fastapi` - app dev server CLI (available via environment)
+- `git` - source control tooling (via Dev Container feature)
+
+Quick sanity check after container startup:
+
+```bash
+opencode --version
+python --version
+uv --version
+git --version
+```
 
 ## Configuration
 
