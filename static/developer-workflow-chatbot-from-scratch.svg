@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="900" viewBox="0 0 1360 900" role="img" aria-labelledby="title desc">
+  <title id="title">Developer workflow to build an AI chatbot app from scratch</title>
+  <desc id="desc">A step-by-step diagram showing planning, setup, backend and frontend implementation, streaming integration, validation, and deployment readiness.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6fbff"/>
+      <stop offset="100%" stop-color="#f4fff8"/>
+    </linearGradient>
+    <linearGradient id="laneA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c6e6ff"/>
+      <stop offset="100%" stop-color="#a9d8ff"/>
+    </linearGradient>
+    <linearGradient id="laneB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe2bf"/>
+      <stop offset="100%" stop-color="#ffd09a"/>
+    </linearGradient>
+    <linearGradient id="laneC" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d8f3e2"/>
+      <stop offset="100%" stop-color="#b9e9cd"/>
+    </linearGradient>
+
+    <marker id="arrow" markerWidth="12" markerHeight="9" refX="10" refY="4.5" orient="auto">
+      <path d="M0,0 L12,4.5 L0,9 z" fill="#2e4f70"/>
+    </marker>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+
+    <style>
+      .title { font: 700 40px "Trebuchet MS", "Verdana", sans-serif; fill: #17314f; }
+      .subtitle { font: 600 17px "Trebuchet MS", "Verdana", sans-serif; fill: #335577; }
+      .stepTitle { font: 700 20px "Trebuchet MS", "Verdana", sans-serif; fill: #11283b; }
+      .stepBody { font: 500 15px "Trebuchet MS", "Verdana", sans-serif; fill: #1f3b52; }
+      .laneTitle { font: 700 22px "Trebuchet MS", "Verdana", sans-serif; fill: #12304a; }
+      .mono { font: 600 14px "Courier New", monospace; fill: #17324b; }
+      .step { stroke: #2b4660; stroke-width: 3; rx: 16; ry: 16; filter: url(#shadow); }
+      .flow { stroke: #2e4f70; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .feedback { stroke: #2e4f70; stroke-width: 3; fill: none; stroke-dasharray: 10 8; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1360" height="900" fill="url(#bg)"/>
+
+  <text x="680" y="58" text-anchor="middle" class="title">Build an AI Chatbot App From Scratch</text>
+  <text x="680" y="86" text-anchor="middle" class="subtitle">Developer workflow: plan -> implement -> validate -> ship</text>
+
+  <rect x="40" y="120" width="1280" height="230" rx="24" fill="url(#laneA)" opacity="0.55"/>
+  <rect x="40" y="370" width="1280" height="230" rx="24" fill="url(#laneB)" opacity="0.55"/>
+  <rect x="40" y="620" width="1280" height="230" rx="24" fill="url(#laneC)" opacity="0.55"/>
+
+  <text x="70" y="154" class="laneTitle">1) Foundation</text>
+  <text x="70" y="404" class="laneTitle">2) Core Build</text>
+  <text x="70" y="654" class="laneTitle">3) Quality and Release</text>
+
+  <g transform="translate(90,180)">
+    <rect class="step" width="260" height="130" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Define Scope</text>
+    <text x="20" y="60" class="stepBody">- Chat UX + streaming goals</text>
+    <text x="20" y="82" class="stepBody">- MVP constraints and non-goals</text>
+    <text x="20" y="108" class="mono">docs/specs/YYYY-MM-DD-*.md</text>
+  </g>
+
+  <g transform="translate(410,180)">
+    <rect class="step" width="260" height="130" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Project Setup</text>
+    <text x="20" y="60" class="stepBody">- Init FastAPI project</text>
+    <text x="20" y="82" class="stepBody">- Add OpenAI SDK + dotenv</text>
+    <text x="20" y="108" class="mono">uv init, uv add fastapi openai</text>
+  </g>
+
+  <g transform="translate(730,180)">
+    <rect class="step" width="260" height="130" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Dev Environment</text>
+    <text x="20" y="60" class="stepBody">- Configure devcontainer</text>
+    <text x="20" y="82" class="stepBody">- Install uv, git, ruff tools</text>
+    <text x="20" y="108" class="mono">.devcontainer/*</text>
+  </g>
+
+  <g transform="translate(1050,180)">
+    <rect class="step" width="230" height="130" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Secrets</text>
+    <text x="20" y="60" class="stepBody">- Add OPENAI_API_KEY</text>
+    <text x="20" y="82" class="stepBody">- Keep .env out of git</text>
+    <text x="20" y="108" class="mono">cp .env.example .env</text>
+  </g>
+
+  <g transform="translate(90,430)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Backend Endpoints</text>
+    <text x="20" y="60" class="stepBody">- GET /health</text>
+    <text x="20" y="82" class="stepBody">- POST /chat with SSE response</text>
+    <text x="20" y="106" class="mono">app/main.py</text>
+  </g>
+
+  <g transform="translate(420,430)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Streaming Integration</text>
+    <text x="20" y="60" class="stepBody">- AsyncOpenAI stream=True</text>
+    <text x="20" y="82" class="stepBody">- Emit data: token and [DONE]</text>
+    <text x="20" y="106" class="mono">text/event-stream</text>
+  </g>
+
+  <g transform="translate(750,430)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Frontend Chat UI</text>
+    <text x="20" y="60" class="stepBody">- Sidebar + thread list</text>
+    <text x="20" y="82" class="stepBody">- Composer + typing animation</text>
+    <text x="20" y="106" class="mono">static/index.html</text>
+  </g>
+
+  <g transform="translate(1080,430)">
+    <rect class="step" width="200" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">State Storage</text>
+    <text x="20" y="60" class="stepBody">- Persist threads local</text>
+    <text x="20" y="82" class="stepBody">- Add clear history UX</text>
+    <text x="20" y="106" class="mono">localStorage</text>
+  </g>
+
+  <g transform="translate(90,680)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Validation</text>
+    <text x="20" y="60" class="stepBody">- Lint and format checks</text>
+    <text x="20" y="82" class="stepBody">- Manual stream verification</text>
+    <text x="20" y="106" class="mono">ruff check, fastapi dev</text>
+  </g>
+
+  <g transform="translate(420,680)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Docs Sync</text>
+    <text x="20" y="60" class="stepBody">- Update README changes</text>
+    <text x="20" y="82" class="stepBody">- Keep specs and AGENTS current</text>
+    <text x="20" y="106" class="mono">README.md + docs/specs</text>
+  </g>
+
+  <g transform="translate(750,680)">
+    <rect class="step" width="280" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Git Workflow</text>
+    <text x="20" y="60" class="stepBody">- Commit focused changes</text>
+    <text x="20" y="82" class="stepBody">- Push and open PR if needed</text>
+    <text x="20" y="106" class="mono">git add/commit/push</text>
+  </g>
+
+  <g transform="translate(1080,680)">
+    <rect class="step" width="200" height="140" fill="#ffffff"/>
+    <text x="20" y="34" class="stepTitle">Ready to Ship</text>
+    <text x="20" y="60" class="stepBody">- Stable local run</text>
+    <text x="20" y="82" class="stepBody">- Reproducible setup</text>
+    <text x="20" y="106" class="mono">v1 sandbox complete</text>
+  </g>
+
+  <path class="flow" d="M350 245 C380 245, 390 245, 410 245"/>
+  <path class="flow" d="M670 245 C700 245, 710 245, 730 245"/>
+  <path class="flow" d="M990 245 C1020 245, 1030 245, 1050 245"/>
+
+  <path class="flow" d="M1180 310 C1180 360, 250 360, 250 430"/>
+  <path class="flow" d="M370 500 C390 500, 400 500, 420 500"/>
+  <path class="flow" d="M700 500 C720 500, 730 500, 750 500"/>
+  <path class="flow" d="M1030 500 C1050 500, 1060 500, 1080 500"/>
+
+  <path class="flow" d="M1180 570 C1180 620, 250 620, 250 680"/>
+  <path class="flow" d="M370 750 C390 750, 400 750, 420 750"/>
+  <path class="flow" d="M700 750 C720 750, 730 750, 750 750"/>
+  <path class="flow" d="M1030 750 C1050 750, 1060 750, 1080 750"/>
+
+  <path class="feedback" d="M250 680 C250 630, 250 590, 250 570"/>
+  <text x="267" y="620" class="small">feedback loop</text>
+
+  <rect x="235" y="842" width="890" height="34" rx="12" fill="#ffffff" stroke="#ccdae8" stroke-width="2"/>
+  <text x="680" y="864" text-anchor="middle" class="small">Tip: keep each step small, test often, and update docs whenever behavior or tooling changes.</text>
+</svg>

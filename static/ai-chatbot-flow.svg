@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Cartoon flow of an AI chatbot app</title>
+  <desc id="desc">A playful diagram showing user input flowing through browser UI, FastAPI backend, OpenAI model, and streaming responses back to the user.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef7f0"/>
+    </linearGradient>
+
+    <linearGradient id="uiGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9fd8ff"/>
+      <stop offset="100%" stop-color="#6fb7ff"/>
+    </linearGradient>
+
+    <linearGradient id="apiGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd79a"/>
+      <stop offset="100%" stop-color="#ffbb6e"/>
+    </linearGradient>
+
+    <linearGradient id="modelGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b5f0ca"/>
+      <stop offset="100%" stop-color="#86e0a8"/>
+    </linearGradient>
+
+    <linearGradient id="dbGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7c8ff"/>
+      <stop offset="100%" stop-color="#e7a4ff"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.18"/>
+    </filter>
+
+    <marker id="arrowBlue" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M0,0 L14,5 L0,10 z" fill="#3478f6"/>
+    </marker>
+
+    <marker id="arrowOrange" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M0,0 L14,5 L0,10 z" fill="#d87818"/>
+    </marker>
+
+    <marker id="arrowGreen" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M0,0 L14,5 L0,10 z" fill="#2c9e57"/>
+    </marker>
+
+    <style>
+      .title { font: 700 44px "Trebuchet MS", "Verdana", sans-serif; fill: #16304f; }
+      .subtitle { font: 500 18px "Trebuchet MS", "Verdana", sans-serif; fill: #335577; }
+      .cardTitle { font: 700 24px "Trebuchet MS", "Verdana", sans-serif; fill: #123; }
+      .cardBody { font: 500 16px "Trebuchet MS", "Verdana", sans-serif; fill: #234; }
+      .label { font: 700 15px "Trebuchet MS", "Verdana", sans-serif; }
+      .small { font: 600 14px "Trebuchet MS", "Verdana", sans-serif; fill: #355; }
+      .lineBlue { stroke: #3478f6; stroke-width: 6; fill: none; marker-end: url(#arrowBlue); }
+      .lineOrange { stroke: #d87818; stroke-width: 6; fill: none; marker-end: url(#arrowOrange); }
+      .lineGreen { stroke: #2c9e57; stroke-width: 6; fill: none; marker-end: url(#arrowGreen); }
+      .cloud { fill: #ffffff; stroke: #d0dfec; stroke-width: 2; }
+      .panel { stroke: #2b3f57; stroke-width: 3; rx: 26; ry: 26; filter: url(#shadow); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="760" fill="url(#bg)"/>
+
+  <g opacity="0.95">
+    <ellipse class="cloud" cx="130" cy="80" rx="62" ry="28"/>
+    <ellipse class="cloud" cx="180" cy="80" rx="55" ry="24"/>
+    <ellipse class="cloud" cx="835" cy="90" rx="70" ry="30"/>
+    <ellipse class="cloud" cx="895" cy="90" rx="58" ry="25"/>
+  </g>
+
+  <text x="600" y="74" text-anchor="middle" class="title">AI Chatbot App Flow</text>
+  <text x="600" y="105" text-anchor="middle" class="subtitle">From user prompt to streamed answer</text>
+
+  <g transform="translate(60,190)">
+    <rect class="panel" width="250" height="250" fill="#fef4d7"/>
+    <text x="125" y="38" text-anchor="middle" class="cardTitle">User</text>
+
+    <circle cx="125" cy="106" r="42" fill="#ffcf8d" stroke="#4f3820" stroke-width="3"/>
+    <circle cx="109" cy="99" r="4" fill="#2f2314"/>
+    <circle cx="141" cy="99" r="4" fill="#2f2314"/>
+    <path d="M108 119 Q125 134 142 119" stroke="#2f2314" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="86" y="150" width="78" height="72" rx="18" fill="#5f9cf4" stroke="#2d4d83" stroke-width="3"/>
+
+    <rect x="36" y="28" width="106" height="40" rx="18" fill="#ffffff" stroke="#9db6cc" stroke-width="2"/>
+    <text x="89" y="53" text-anchor="middle" class="small">"Tell me a joke"</text>
+  </g>
+
+  <g transform="translate(360,170)">
+    <rect class="panel" width="300" height="290" fill="url(#uiGrad)"/>
+    <text x="150" y="42" text-anchor="middle" class="cardTitle">Browser UI</text>
+    <text x="150" y="70" text-anchor="middle" class="cardBody">HTML + JS chat screen</text>
+
+    <rect x="32" y="94" width="236" height="150" rx="16" fill="#f8fcff" stroke="#2e6aa8" stroke-width="3"/>
+    <rect x="46" y="110" width="115" height="30" rx="14" fill="#dbeeff"/>
+    <rect x="165" y="149" width="88" height="30" rx="14" fill="#cfe5ff"/>
+    <rect x="46" y="188" width="170" height="30" rx="14" fill="#e8f3ff"/>
+    <rect x="46" y="228" width="190" height="8" rx="4" fill="#aacdf5"/>
+    <text x="150" y="267" text-anchor="middle" class="small">Sends POST /chat and reads SSE stream</text>
+  </g>
+
+  <g transform="translate(720,170)">
+    <rect class="panel" width="300" height="290" fill="url(#apiGrad)"/>
+    <text x="150" y="42" text-anchor="middle" class="cardTitle">FastAPI Backend</text>
+    <text x="150" y="70" text-anchor="middle" class="cardBody">/chat endpoint + SSE relay</text>
+
+    <rect x="38" y="98" width="224" height="60" rx="14" fill="#fff5e9" stroke="#9a5f1a" stroke-width="3"/>
+    <text x="150" y="128" text-anchor="middle" class="small">1) Receive messages</text>
+    <text x="150" y="146" text-anchor="middle" class="small">2) Add system prompt</text>
+
+    <rect x="38" y="172" width="224" height="60" rx="14" fill="#fff5e9" stroke="#9a5f1a" stroke-width="3"/>
+    <text x="150" y="202" text-anchor="middle" class="small">3) Stream tokens back</text>
+    <text x="150" y="220" text-anchor="middle" class="small">data: token ... [DONE]</text>
+  </g>
+
+  <g transform="translate(450,510)">
+    <rect class="panel" width="250" height="170" fill="url(#dbGrad)"/>
+    <text x="125" y="38" text-anchor="middle" class="cardTitle">Local Storage</text>
+    <text x="125" y="66" text-anchor="middle" class="cardBody">Thread history on client</text>
+
+    <ellipse cx="125" cy="105" rx="74" ry="18" fill="#f7e6ff" stroke="#8850a7" stroke-width="3"/>
+    <path d="M51 105 V136" stroke="#8850a7" stroke-width="3"/>
+    <path d="M199 105 V136" stroke="#8850a7" stroke-width="3"/>
+    <ellipse cx="125" cy="136" rx="74" ry="18" fill="#efd4ff" stroke="#8850a7" stroke-width="3"/>
+  </g>
+
+  <g transform="translate(980,510)">
+    <rect class="panel" width="170" height="170" fill="url(#modelGrad)"/>
+    <text x="85" y="40" text-anchor="middle" class="cardTitle">AI Model</text>
+    <rect x="30" y="62" width="110" height="80" rx="16" fill="#effcf3" stroke="#2c9e57" stroke-width="3"/>
+    <circle cx="62" cy="96" r="6" fill="#2c9e57"/>
+    <circle cx="108" cy="96" r="6" fill="#2c9e57"/>
+    <path d="M62 120 Q85 134 108 120" stroke="#2c9e57" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <path class="lineBlue" d="M310 315 C335 315, 340 315, 360 315"/>
+  <text x="334" y="292" class="label" fill="#2c67d8">Prompt</text>
+
+  <path class="lineOrange" d="M660 315 C692 315, 688 315, 720 315"/>
+  <text x="688" y="292" class="label" fill="#c86c15">POST /chat</text>
+
+  <path class="lineGreen" d="M980 510 C980 480, 910 420, 840 365"/>
+  <text x="932" y="438" class="label" fill="#2c9e57">Model stream</text>
+
+  <path class="lineBlue" d="M720 345 C690 360, 690 380, 660 395"/>
+  <text x="674" y="423" class="label" fill="#2c67d8">SSE tokens</text>
+
+  <path class="lineOrange" d="M505 460 C505 490, 530 500, 548 510"/>
+  <text x="438" y="498" class="label" fill="#c86c15">Save thread</text>
+
+  <path class="lineBlue" d="M576 510 C566 496, 550 484, 536 470"/>
+
+  <rect x="56" y="688" width="1088" height="52" rx="20" fill="#ffffff" stroke="#cdd9e6" stroke-width="2"/>
+  <text x="600" y="721" text-anchor="middle" class="small">User asks - Browser sends history - Backend relays to model - Tokens stream back - UI renders and saves local history</text>
+</svg>

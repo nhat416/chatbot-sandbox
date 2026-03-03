@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860" role="img" aria-labelledby="title desc">
+  <title id="title">Chatbot Sandbox Code Architecture Diagram</title>
+  <desc id="desc">Diagram of frontend, backend, configuration, and development tooling architecture for the chatbot sandbox project.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7fbff"/>
+      <stop offset="100%" stop-color="#f8fff7"/>
+    </linearGradient>
+    <linearGradient id="frontendGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b8e3ff"/>
+      <stop offset="100%" stop-color="#85c9ff"/>
+    </linearGradient>
+    <linearGradient id="backendGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd9ae"/>
+      <stop offset="100%" stop-color="#ffbf77"/>
+    </linearGradient>
+    <linearGradient id="configGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d8c8ff"/>
+      <stop offset="100%" stop-color="#beabff"/>
+    </linearGradient>
+    <linearGradient id="toolingGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#bdeec9"/>
+      <stop offset="100%" stop-color="#8fe0a5"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="9" refX="10" refY="4.5" orient="auto">
+      <path d="M0,0 L12,4.5 L0,9 z" fill="#2f4f6d"/>
+    </marker>
+    <style>
+      .h1 { font: 700 42px "Trebuchet MS", "Verdana", sans-serif; fill: #17314f; }
+      .h2 { font: 700 22px "Trebuchet MS", "Verdana", sans-serif; fill: #12263a; }
+      .body { font: 500 16px "Trebuchet MS", "Verdana", sans-serif; fill: #1f3447; }
+      .mono { font: 600 15px "Courier New", monospace; fill: #1b2f44; }
+      .small { font: 600 14px "Trebuchet MS", "Verdana", sans-serif; fill: #2f4f6d; }
+      .panel { stroke: #2a4057; stroke-width: 3; rx: 24; ry: 24; filter: url(#shadow); }
+      .arrow { stroke: #2f4f6d; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 10 8; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="860" fill="url(#bg)"/>
+
+  <text x="640" y="62" text-anchor="middle" class="h1">Chatbot Sandbox Code Architecture</text>
+  <text x="640" y="92" text-anchor="middle" class="small">FastAPI + static frontend + local browser persistence</text>
+
+  <g transform="translate(70,140)">
+    <rect class="panel" width="520" height="300" fill="url(#frontendGrad)"/>
+    <text x="260" y="42" text-anchor="middle" class="h2">Frontend Layer</text>
+    <text x="34" y="82" class="mono">static/index.html</text>
+    <text x="34" y="112" class="body">- Single-file UI (HTML + CSS + JS)</text>
+    <text x="34" y="140" class="body">- Thread list + active thread switching</text>
+    <text x="34" y="168" class="body">- Sends full thread history to POST /chat</text>
+    <text x="34" y="196" class="body">- Reads SSE stream, token queue animation</text>
+    <text x="34" y="224" class="body">- Persists threads in localStorage</text>
+    <text x="34" y="262" class="mono">static/ai-chatbot-flow.svg</text>
+    <text x="34" y="286" class="mono">static/code-architecture-diagram.svg</text>
+  </g>
+
+  <g transform="translate(690,140)">
+    <rect class="panel" width="520" height="300" fill="url(#backendGrad)"/>
+    <text x="260" y="42" text-anchor="middle" class="h2">Backend Layer</text>
+    <text x="34" y="82" class="mono">app/main.py</text>
+    <text x="34" y="112" class="body">- FastAPI app entrypoint</text>
+    <text x="34" y="140" class="body">- POST /chat: OpenAI streaming relay</text>
+    <text x="34" y="168" class="body">- SSE format: data: token + [DONE]</text>
+    <text x="34" y="196" class="body">- GET /health endpoint</text>
+    <text x="34" y="224" class="body">- Static mount serves static/ (mounted last)</text>
+    <text x="34" y="262" class="mono">OpenAI SDK (AsyncOpenAI)</text>
+  </g>
+
+  <g transform="translate(70,490)">
+    <rect class="panel" width="520" height="280" fill="url(#configGrad)"/>
+    <text x="260" y="42" text-anchor="middle" class="h2">Config &amp; Documentation</text>
+    <text x="34" y="84" class="mono">pyproject.toml / uv.lock</text>
+    <text x="34" y="110" class="body">- Python deps and lockfile</text>
+    <text x="34" y="142" class="mono">.env.example</text>
+    <text x="34" y="168" class="body">- OPENAI_API_KEY template</text>
+    <text x="34" y="200" class="mono">README.md</text>
+    <text x="34" y="226" class="body">- Setup, architecture, dev container usage</text>
+    <text x="34" y="258" class="mono">docs/specs/*.md + AGENTS.md</text>
+  </g>
+
+  <g transform="translate(690,490)">
+    <rect class="panel" width="520" height="280" fill="url(#toolingGrad)"/>
+    <text x="260" y="42" text-anchor="middle" class="h2">Tooling &amp; Runtime</text>
+    <text x="34" y="84" class="mono">.devcontainer/Dockerfile</text>
+    <text x="34" y="110" class="body">- Python 3.12, uv, opencode, ruff</text>
+    <text x="34" y="142" class="mono">.devcontainer/devcontainer.json</text>
+    <text x="34" y="168" class="body">- VS Code extensions + postCreate uv sync</text>
+    <text x="34" y="200" class="mono">uv run fastapi dev app/main.py</text>
+    <text x="34" y="226" class="body">- Local dev server on port 8000</text>
+    <text x="34" y="258" class="mono">ruff / git / opencode</text>
+  </g>
+
+  <path class="arrow" d="M590 290 C640 290, 640 290, 690 290"/>
+  <text x="640" y="270" text-anchor="middle" class="small">HTTP + SSE</text>
+
+  <path class="arrow" d="M950 440 C950 470, 950 470, 950 490"/>
+  <text x="980" y="468" class="small">Runs in container</text>
+
+  <path class="arrow" d="M330 440 C330 470, 330 470, 330 490"/>
+  <text x="190" y="468" class="small">Guides behavior</text>
+
+  <path class="arrow dash" d="M590 640 C640 640, 640 640, 690 640"/>
+  <text x="640" y="622" text-anchor="middle" class="small">Tooling supports app workflow</text>
+
+  <rect x="250" y="804" width="780" height="38" rx="14" fill="#ffffff" stroke="#c9d8e5" stroke-width="2"/>
+  <text x="640" y="829" text-anchor="middle" class="small">Separation of concerns: UI state in browser, API orchestration in backend, runtime setup in devcontainer</text>
+</svg>

@@ -14,6 +14,7 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 
 - [Features](#features)
 - [Architecture](#architecture)
+- [Architecture Visuals](#architecture-visuals)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
@@ -96,6 +97,17 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 - **No backend database** -- conversation threads are stored client-side in browser `localStorage`.
 - **No authentication** -- this is a local development sandbox, not a production service.
 - **No build tooling** -- the frontend is a single HTML file with inline CSS and JS, served as a static file.
+
+## Architecture Visuals
+
+The project includes SVG diagrams you can open directly in the browser or preview in GitHub:
+
+- **AI chatbot flow (cartoon style):** `static/ai-chatbot-flow.svg`
+- **Code architecture and design:** `static/code-architecture-diagram.svg`
+
+![AI chatbot flow](static/ai-chatbot-flow.svg)
+
+![Code architecture diagram](static/code-architecture-diagram.svg)
 
 ## Project Structure
 
