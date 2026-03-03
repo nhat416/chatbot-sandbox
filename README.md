@@ -1,6 +1,14 @@
 # Chatbot Sandbox
 
-A minimal AI chatbot built with **FastAPI** and the **OpenAI Python SDK**. It streams responses from OpenAI's chat completion API to a browser-based chat interface using Server-Sent Events (SSE). The project is intentionally simple -- around 350 lines of hand-written code -- making it an ideal starting point for learning how to build AI-powered web applications.
+A minimal AI chatbot built with **FastAPI** and the **OpenAI Python SDK**. It streams responses from OpenAI's chat completion API to a browser-based chat interface using Server-Sent Events (SSE). The project is intentionally simple and now includes a spec-driven workflow for AI-assisted development, making it a practical starting point for building and evolving AI-powered web applications safely.
+
+## For Contributors
+
+If you are contributing with an AI coding agent (or reviewing agent-generated work), start here:
+
+- Read `AGENTS.md` for repository conventions, safety rules, and validation expectations.
+- Use `docs/specs/0000-00-00-example-template.md` to create specs for non-trivial changes.
+- Store new specs in `docs/specs/` using `YYYY-MM-DD-short-kebab-title.md` naming.
 
 ## Table of Contents
 
@@ -14,6 +22,7 @@ A minimal AI chatbot built with **FastAPI** and the **OpenAI Python SDK**. It st
 - [How It Works](#how-it-works)
 - [API Reference](#api-reference)
 - [Changing the Model](#changing-the-model)
+- [AI Agent Workflow](#ai-agent-workflow)
 - [Development Notes](#development-notes)
 - [Troubleshooting](#troubleshooting)
 
@@ -21,10 +30,11 @@ A minimal AI chatbot built with **FastAPI** and the **OpenAI Python SDK**. It st
 
 - Real-time streaming responses with a natural typing effect
 - Full conversation context maintained across messages
-- Dark-themed, responsive chat UI -- no build step required
+- Responsive, no-build chat UI with clean bubble-style layout
 - Async FastAPI backend for non-blocking I/O
 - Dev Container support for GitHub Codespaces and VS Code
 - Single-command startup with `uv`
+- Spec-driven development support for AI agents via `AGENTS.md` and `docs/specs/`
 
 ## Architecture
 
@@ -63,7 +73,7 @@ A minimal AI chatbot built with **FastAPI** and the **OpenAI Python SDK**. It st
 ┌─────────────────────────────────────────────────────┐
 │              OpenAI API                             │
 │                                                     │
-│  - Model: gpt-5-nano (configurable)                │
+│  - Model: gpt-5-mini (configurable)                │
 │  - Chat Completions endpoint                        │
 │  - Streaming enabled                                │
 └─────────────────────────────────────────────────────┘
@@ -92,11 +102,15 @@ chatbot-sandbox/
 ├── .devcontainer/
 │   ├── devcontainer.json      # Dev Container config (Codespaces / VS Code)
 │   └── Dockerfile             # Python 3.12-slim + uv
+├── docs/
+│   └── specs/
+│       └── 0000-00-00-example-template.md  # Spec template for non-trivial changes
 ├── app/
 │   ├── __init__.py            # Makes app/ a Python package
 │   └── main.py                # FastAPI application (endpoints, streaming, static mount)
 ├── static/
 │   └── index.html             # Chat UI (HTML + CSS + JS, zero dependencies)
+├── AGENTS.md                  # Working guide for AI coding agents in this repo
 ├── .env.example               # Template for environment variables
 ├── .gitignore                 # Ignores .env, .venv/, __pycache__/, IDE files
 ├── pyproject.toml             # Project metadata and dependencies
@@ -108,6 +122,8 @@ chatbot-sandbox/
 |---|---|
 | `app/main.py` | The entire backend -- FastAPI app with chat endpoint, health check, and static file serving |
 | `static/index.html` | The entire frontend -- self-contained chat interface with no external dependencies |
+| `AGENTS.md` | Repository rules for AI agents (workflow, safety, validation, and spec requirements) |
+| `docs/specs/` | Spec files for non-trivial changes (feature work, behavior changes, risky refactors) |
 | `pyproject.toml` | Declares Python version (>=3.12) and three dependencies |
 | `.devcontainer/` | Enables one-click setup in GitHub Codespaces or VS Code Dev Containers |
 
@@ -267,7 +283,7 @@ The model is set in `app/main.py` inside the `stream_response` function. To chan
 
 ```python
 response = await client.chat.completions.create(
-    model="gpt-4o-mini",  # Change this to your preferred model
+    model="gpt-5-mini",  # Change this to your preferred model
     messages=all_messages,
     stream=True,
 )
@@ -276,10 +292,29 @@ response = await client.chat.completions.create(
 Available options (as noted in the source):
 - `gpt-4o-mini` -- fast, cost-effective
 - `gpt-4.1` -- high capability
-- `gpt-5-nano` -- current default
-- `gpt-5-mini` -- balanced performance
+- `gpt-5-nano` -- lightweight, fast option
+- `gpt-5-mini` -- current default, balanced performance
 
 Refer to [OpenAI's model documentation](https://platform.openai.com/docs/models) for the latest available models and pricing.
+
+## AI Agent Workflow
+
+This repository includes an agent operating guide in `AGENTS.md` and uses spec-driven development for non-trivial work.
+
+**What this means in practice:**
+
+- AI agents should treat specs as the source of truth for behavior changes.
+- Non-trivial updates (new features, behavior changes, risky refactors) should start with a spec in `docs/specs/`.
+- Spec file naming convention: `YYYY-MM-DD-short-kebab-title.md`.
+- Trivial edits (small typo/docs fixes, obvious one-line fixes) can skip a full spec.
+
+**Recommended flow:**
+
+1. Read `AGENTS.md` before making changes.
+2. Create or update a spec in `docs/specs/` if the change is non-trivial.
+3. Implement in small steps mapped to acceptance criteria.
+4. Run validation commands and perform manual checks.
+5. Keep docs and `AGENTS.md` updated when workflow or conventions change.
 
 ## Development Notes
 
@@ -291,6 +326,7 @@ Refer to [OpenAI's model documentation](https://platform.openai.com/docs/models)
   uv run ruff check .
   uv run ruff format .
   ```
+- **Agent guidance**: See `AGENTS.md` for coding conventions, safety rules, and PR expectations when using AI coding agents.
 
 ## Troubleshooting
 
