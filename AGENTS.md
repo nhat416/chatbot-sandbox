@@ -32,6 +32,7 @@ For non-trivial changes (new feature, behavior change, refactor with risk), use 
 3. Implement in small steps that map to acceptance criteria.
 4. Validate with tests/manual checks.
 5. Update docs and this `AGENTS.md` if workflow/conventions changed.
+6. Review `README.md` and update it for any user/developer-visible behavior, tooling, or workflow changes.
 
 Skip a full spec only for trivial edits (typos, tiny comment/doc fixes, obvious one-line bug fixes).
 
@@ -150,7 +151,13 @@ Update this file whenever any of these change:
 
 Include AGENTS.md updates in the same PR as the change introducing the new rule.
 
-## 11) Default Decision Policy for Agents
+## 11) README Sync Rule
+
+- Treat `README.md` as a living, user-facing source of truth for the current project behavior.
+- For every feature, bug fix, patch, or workflow/tooling update, review whether `README.md` is now outdated.
+- If outdated, update `README.md` in the same change set/PR to keep setup, architecture, and behavior docs accurate.
+
+## 12) Default Decision Policy for Agents
 
 When requirements are ambiguous, choose the most conservative option that:
 

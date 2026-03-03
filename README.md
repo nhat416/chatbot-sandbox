@@ -29,8 +29,9 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 ## Features
 
 - Real-time streaming responses with a natural typing effect
-- Full conversation context maintained across messages
-- Responsive, no-build chat UI with clean bubble-style layout
+- ChatGPT-style interface with left sidebar, thread history, and centered composer
+- Multi-thread chat state in the browser with active-thread switching
+- Frontend thread persistence via `localStorage` (no backend database)
 - Async FastAPI backend for non-blocking I/O
 - Dev Container support for GitHub Codespaces and VS Code
 - Single-command startup with `uv`
@@ -44,9 +45,9 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 │                                                     │
 │  static/index.html                                  │
 │  ┌───────────────────────────────────────────────┐  │
-│  │  - Renders chat UI (HTML + inline CSS)        │  │
-│  │  - Maintains conversation history in JS array │  │
-│  │  - Sends POST /chat with full message history │  │
+│  │  - Renders sidebar + thread-based chat UI     │  │
+│  │  - Stores threads in localStorage             │  │
+│  │  - Sends active-thread message history        │  │
 │  │  - Consumes SSE stream via ReadableStream     │  │
 │  │  - Token queue + render loop for smooth       │  │
 │  │    typing animation (50ms interval)           │  │
@@ -82,7 +83,7 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 **Request flow:**
 
 1. User types a message in the browser and clicks Send (or presses Enter).
-2. The frontend sends a `POST /chat` request with the full conversation history as JSON.
+2. The frontend sends a `POST /chat` request with the active thread's full message history as JSON.
 3. FastAPI prepends a system prompt and forwards the messages to OpenAI's Chat Completions API with `stream=True`.
 4. As tokens arrive from OpenAI, the backend emits them as SSE events (`data: <token>\n\n`).
 5. The frontend reads the stream using the `ReadableStream` API, queues tokens, and renders them at 50ms intervals for a smooth typing effect.
@@ -91,7 +92,7 @@ If you are contributing with an AI coding agent (or reviewing agent-generated wo
 **Key design decisions:**
 
 - **`AsyncOpenAI`** is used instead of the synchronous client so streaming does not block the FastAPI event loop.
-- **No database** -- conversation history lives in browser memory and resets on page refresh.
+- **No backend database** -- conversation threads are stored client-side in browser `localStorage`.
 - **No authentication** -- this is a local development sandbox, not a production service.
 - **No build tooling** -- the frontend is a single HTML file with inline CSS and JS, served as a static file.
 
@@ -102,9 +103,13 @@ chatbot-sandbox/
 ├── .devcontainer/
 │   ├── devcontainer.json      # Dev Container config (Codespaces / VS Code)
 │   └── Dockerfile             # Python 3.12-slim + uv
+├── designs/
+│   ├── chatbot_design_1.png   # UI reference image
+│   └── chatbot_design_2.png   # UI reference image
 ├── docs/
 │   └── specs/
-│       └── 0000-00-00-example-template.md  # Spec template for non-trivial changes
+│       ├── 0000-00-00-example-template.md  # Spec template for non-trivial changes
+│       └── 2026-03-03-chat-ui-sidebar-redesign.md  # UI redesign spec
 ├── app/
 │   ├── __init__.py            # Makes app/ a Python package
 │   └── main.py                # FastAPI application (endpoints, streaming, static mount)
@@ -248,9 +253,12 @@ The frontend is a self-contained HTML file with inline CSS and JavaScript -- no 
 
 **Key behaviors:**
 
-- **Conversation history** is maintained in a JavaScript array. The full history is sent with each request so the model has context of the entire conversation.
+- **Thread-based chat UI** includes a left sidebar with chat threads, new chat action, and active-thread highlighting.
+- **Conversation context** is maintained per thread. The active thread's full history is sent with each request so the model has context.
+- **Persistence** uses browser `localStorage` to retain threads/messages across page refreshes on the same browser.
 - **Streaming display** uses a token queue architecture: the network reader fills a queue as tokens arrive, and a separate render loop drains the queue at 50ms intervals. This creates a smooth, readable typing animation regardless of network speed.
-- **Keyboard shortcuts**: Enter sends the message, Shift+Enter inserts a newline.
+- **Keyboard shortcuts**: Enter sends the message, Shift+Enter inserts a newline, and input auto-resizes as you type.
+- **Responsive layout**: Sidebar becomes off-canvas on smaller screens with a mobile toggle.
 - **Error handling**: If the server is unreachable, an error message is displayed in the chat.
 
 ## API Reference
@@ -336,7 +344,7 @@ This repository includes an agent operating guide in `AGENTS.md` and uses spec-d
 ## Development Notes
 
 - **Auto-reload**: `fastapi dev` watches for file changes and restarts the server automatically. No need to manually restart during development.
-- **No database**: Conversations are ephemeral. Refreshing the page clears all history. This is by design -- the sandbox focuses on the core chat streaming pattern.
+- **No backend persistence**: There is no server-side database. Chat threads are persisted only in each browser's local storage.
 - **No authentication**: All endpoints are open. Do not deploy this to the public internet without adding proper access controls.
 - **Linting**: The `.ruff_cache/` directory in `.gitignore` indicates [Ruff](https://docs.astral.sh/ruff/) can be used for linting and formatting. Run it with:
   ```bash
